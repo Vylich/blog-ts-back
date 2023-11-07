@@ -7,7 +7,7 @@ import UserModel from '../models/User.js';
 
 export const register = async (req: express.Request, res: express.Response) => {
   try {
-    const password: string = req.body.pass;
+    const password: string = req.body.password;
     const salt: string = await bcrypt.genSalt(10);
     const hash: string = await bcrypt.hash(password, salt);
 
@@ -55,7 +55,7 @@ export const login = async (req: express.Request, res: express.Response) => {
       });
     }
     const isValidPass = await bcrypt.compare(
-      req.body.pass,
+      req.body.password,
       user._doc.passwordHash
     );
 

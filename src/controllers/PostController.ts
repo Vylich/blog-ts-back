@@ -1,6 +1,24 @@
 import express from 'express';
 import PostModel from '../models/Post.js';
 
+export const getLastTags = async (req: any, res: express.Response) => {
+  try {
+    const posts = await PostModel.find().limit(5).exec();
+
+    const tags = posts
+      .map((obj) => obj.tags)
+      .flat()
+      .slice(0, 5);
+
+    res.json(tags);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'xui tebe',
+    });
+  }
+};
+
 export const getAll = async (req: any, res: express.Response) => {
   try {
     const posts = await PostModel.find().populate('user').exec();
@@ -18,16 +36,24 @@ export const getOne = async (req: any, res: express.Response) => {
   try {
     const postId = req.params.id;
 
-    PostModel.findOneAndUpdate({_id: postId}, {$inc: {views: 1}}, {returnDocument: 'after'}).then((doc) => {
-      if(!doc) {
-          return res.status(404).json({message: 'Request post not found'})
-      }
-      res.json(doc)
-  }).catch((err) => {
-      if(err) {
-          return res.status(403).json({message: 'Posts not found', error: err})
-      }
-  })
+    PostModel.findOneAndUpdate(
+      { _id: postId },
+      { $inc: { viewsCount: 1 } },
+      { returnDocument: 'after' }
+    ).populate('user')
+      .then((doc) => {
+        if (!doc) {
+          return res.status(404).json({ message: 'Request post not found' });
+        }
+        res.json(doc);
+      })
+      .catch((err) => {
+        if (err) {
+          return res
+            .status(403)
+            .json({ message: 'Posts not found', error: err });
+        }
+      });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -40,18 +66,22 @@ export const remove = async (req: any, res: express.Response) => {
   try {
     const postId = req.params.id;
 
-    PostModel.findOneAndDelete({_id: postId}).then((doc) => {
-      if(!doc) {
-          return res.status(404).json({message: 'Request post not found'})
-      }
-      res.json({
-        success: true,
+    PostModel.findOneAndDelete({ _id: postId })
+      .then((doc) => {
+        if (!doc) {
+          return res.status(404).json({ message: 'Request post not found' });
+        }
+        res.json({
+          success: true,
+        });
       })
-  }).catch((err) => {
-      if(err) {
-          return res.status(403).json({message: 'Post not deleted', error: err})
-      }
-  })
+      .catch((err) => {
+        if (err) {
+          return res
+            .status(403)
+            .json({ message: 'Post not deleted', error: err });
+        }
+      });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -66,7 +96,7 @@ export const create = async (req: any, res: express.Response) => {
       title: req.body.title,
       text: req.body.text,
       imageUrl: req.body.imageUrl,
-      tags: req.body.tags,
+      tags: req.body.tags.split(','),
       user: req.userId,
     });
 
@@ -81,28 +111,30 @@ export const create = async (req: any, res: express.Response) => {
   }
 };
 
-
 export const update = async (req: any, res: express.Response) => {
   try {
     const postId = req.params.id;
 
-    await PostModel.updateOne({
-      _id: postId,
-    }, {
-      title: req.body.title,
-      text: req.body.text,
-      imageUrl: req.body.imageUrl,
-      tags: req.body.tags,
-      user: req.userId,
-    });
+    await PostModel.updateOne(
+      {
+        _id: postId,
+      },
+      {
+        title: req.body.title,
+        text: req.body.text,
+        imageUrl: req.body.imageUrl,
+        tags: req.body.tags.split(','),
+        user: req.userId,
+      }
+    );
 
     res.json({
       success: true,
-    })
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       message: 'xui tebe',
     });
   }
-}
+};
