@@ -4,7 +4,7 @@ export const registerValidator = [
   body('email', 'Неверная почта').isEmail(),
   body('password', 'Пароль минимум из 6 символов').isLength({min: 6}),
   body('fullName', 'Укажите имя').isLength({min: 2}),
-  body('avatarUrl', 'Неверная ссылка на картинку').optional().isURL(),
+  body('avatarUrl', 'Невернsq формат').optional().isString(),
 ];
 
 export const loginValidator = [

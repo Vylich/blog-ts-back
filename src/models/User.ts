@@ -8,7 +8,7 @@ interface IEvent extends DocumentResult<IEvent> {
   _id: any;
   email: string;
   passwordHash: string;
-  avatarUrl: number;
+  avatarUrl: string;
 }
 
 const UserSchema = new mongoose.Schema({

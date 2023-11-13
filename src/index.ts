@@ -15,12 +15,12 @@ import { checkAuth, handleValidationErrors } from './utils/index.js';
 import { UserController, PostController } from './controllers/index.js';
 
 mongoose
-  .connect(String(process.env.MONGODB_URI))
+  .connect('mongodb+srv://ilya:vylich@cluster0.vlxnzsy.mongodb.net/blog')
   .then(() => console.log('DB ok'))
   .catch((err) => console.log('DB error', err));
 
 const app = express();
-const port: number = 5000;
+const port = process.env.PORT || 5000;
 
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
@@ -57,7 +57,6 @@ app.get('/auth/me', checkAuth, UserController.checkMe);
 
 app.post(
   '/upload',
-  checkAuth,
   upload.single('image'),
   (req: any, res: express.Response) => {
     res.json({
@@ -65,6 +64,7 @@ app.post(
     });
   }
 );
+
 
 app.get('/posts', PostController.getAll);
 app.get('/tags', PostController.getLastTags);
@@ -85,6 +85,6 @@ app.patch(
   PostController.update
 );
 
-app.listen(process.env.PORT || port, () => {
+app.listen(port, () => {
   console.log(`Server on port ${port} ok`);
 });

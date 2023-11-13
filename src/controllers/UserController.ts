@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import { Result, ValidationChain, validationResult } from 'express-validator';
 import UserModel from '../models/User.js';
 
-
 export const register = async (req: express.Request, res: express.Response) => {
   try {
     const password: string = req.body.password;
@@ -43,7 +42,6 @@ export const register = async (req: express.Request, res: express.Response) => {
     });
   }
 };
-
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -87,7 +85,7 @@ export const login = async (req: express.Request, res: express.Response) => {
       message: 'Unable to login',
     });
   }
-}
+};
 
 export const checkMe = async (req: any, res: express.Response) => {
   try {
@@ -101,12 +99,11 @@ export const checkMe = async (req: any, res: express.Response) => {
 
     const { passwordHash, ...userData } = user._doc;
 
-      res.json(userData);
-
+    res.json(userData);
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: 'xui tebe'
+      message: 'xui tebe',
     });
   }
 };
