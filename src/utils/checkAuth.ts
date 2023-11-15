@@ -1,12 +1,8 @@
 import jwt from "jsonwebtoken";
-import { Response, NextFunction } from 'express';
-
-
 
 interface JwtPayload {
   _id: string;
 };
-
 
 export default (req: any, res: any, next: any) => {
   const token = (req.headers.authorization || '').replace(/Bearer\s?/, '');

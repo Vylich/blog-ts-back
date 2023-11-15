@@ -32,6 +32,38 @@ export const getAll = async (req: any, res: express.Response) => {
   }
 };
 
+export const getAllNew = async (req: any, res: express.Response) => {
+  try {
+    const posts = await PostModel.find()
+      .populate('user')
+      .sort('-createdAt')
+      .exec();
+
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'xui tebe',
+    });
+  }
+};
+
+export const getAllPopulate = async (req: any, res: express.Response) => {
+  try {
+    const posts = await PostModel.find()
+      .populate('user')
+      .sort('-viewsCount')
+      .exec();
+
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'xui tebe',
+    });
+  }
+};
+
 export const getOne = async (req: any, res: express.Response) => {
   try {
     const postId = req.params.id;
@@ -40,7 +72,14 @@ export const getOne = async (req: any, res: express.Response) => {
       { _id: postId },
       { $inc: { viewsCount: 1 } },
       { returnDocument: 'after' }
-    ).populate('user')
+    )
+      .populate('user')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'user',
+        },
+      })
       .then((doc) => {
         if (!doc) {
           return res.status(404).json({ message: 'Request post not found' });

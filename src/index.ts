@@ -8,11 +8,12 @@ import {
   registerValidator,
   loginValidator,
   postCreateValidation,
+  commentCreateValidation,
 } from './validations/validations.js';
 
 import { checkAuth, handleValidationErrors } from './utils/index.js';
 
-import { UserController, PostController } from './controllers/index.js';
+import { UserController, PostController, CommentController } from './controllers/index.js';
 
 mongoose
   .connect('mongodb+srv://ilya:vylich@cluster0.vlxnzsy.mongodb.net/blog')
@@ -65,10 +66,10 @@ app.post(
   }
 );
 
-
 app.get('/posts', PostController.getAll);
-app.get('/tags', PostController.getLastTags);
-app.get('/posts/:id', PostController.getOne);
+app.get('/posts/new', PostController.getAllNew);
+app.get('/posts/populate', PostController.getAllPopulate);
+
 app.post(
   '/posts',
   checkAuth,
@@ -84,6 +85,14 @@ app.patch(
   handleValidationErrors,
   PostController.update
 );
+
+app.post('/comments/:id', checkAuth, commentCreateValidation, CommentController.createComment);
+app.get('/comments', CommentController.getComments);
+
+
+app.get('/tags', PostController.getLastTags);
+
+app.get('/posts/:id', PostController.getOne);
 
 app.listen(port, () => {
   console.log(`Server on port ${port} ok`);
