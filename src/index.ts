@@ -91,6 +91,8 @@ app.get('/comments', CommentController.getComments);
 
 
 app.get('/tags', PostController.getLastTags);
+app.get('/tags/:id', PostController.getPostsByTag);
+
 
 app.get('/posts/:id', PostController.getOne);
 

@@ -19,6 +19,20 @@ export const getLastTags = async (req: any, res: express.Response) => {
   }
 };
 
+export const getPostsByTag = async (req: any, res: express.Response) => {
+  try {
+    const tagName = req.params.id;
+    const posts = await PostModel.find({ 'tags': tagName }).populate('user').exec();
+
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'xui tebe',
+    });
+  }
+};
+
 export const getAll = async (req: any, res: express.Response) => {
   try {
     const posts = await PostModel.find().populate('user').exec();
