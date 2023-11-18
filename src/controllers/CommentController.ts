@@ -1,6 +1,7 @@
 import express from 'express';
 import CommentModel from '../models/Comment.js';
 import PostModel from '../models/Post.js';
+import Post from '../models/Post.js';
 
 export const createComment = async (req: any, res: express.Response) => {
   try {
@@ -11,7 +12,6 @@ export const createComment = async (req: any, res: express.Response) => {
     });
 
     const comment = await doc.save();
-    console.log(comment);
 
     try {
       await PostModel.findByIdAndUpdate(comment.post, {
@@ -41,6 +41,39 @@ export const getComments = async (req: any, res: express.Response) => {
     console.log(err);
     res.status(500).json({
       message: 'Не удалось получить комментарии',
+    });
+  }
+};
+
+export const removeComment = async (req: any, res: express.Response) => {
+  try {
+    const commentId = req.params.id;
+
+    CommentModel.findOneAndDelete({ _id: commentId })
+      .then((doc) => {
+        if (!doc) {
+          return res.status(404).json({ message: 'Request comment not found' });
+        }
+        res.json({
+          success: true,
+        });
+      })
+      .catch((err) => {
+        if (err) {
+          return res
+            .status(403)
+            .json({ message: 'Comment not deleted', error: err });
+        }
+      });
+
+    await PostModel.updateMany(
+      {},
+      { $pull: { comments: commentId } }
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'xui tebe',
     });
   }
 };

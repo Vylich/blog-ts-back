@@ -69,6 +69,8 @@ app.post(
 app.get('/posts', PostController.getAll);
 app.get('/posts/new', PostController.getAllNew);
 app.get('/posts/populate', PostController.getAllPopulate);
+app.get('/posts/my', checkAuth, PostController.getAllMy);
+
 
 app.post(
   '/posts',
@@ -88,10 +90,12 @@ app.patch(
 
 app.post('/comments/:id', checkAuth, commentCreateValidation, CommentController.createComment);
 app.get('/comments', CommentController.getComments);
+app.delete('/comment/:id', checkAuth, CommentController.removeComment);
 
 
 app.get('/tags', PostController.getLastTags);
 app.get('/tags/:id', PostController.getPostsByTag);
+
 
 
 app.get('/posts/:id', PostController.getOne);

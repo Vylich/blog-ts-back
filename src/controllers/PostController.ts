@@ -1,5 +1,6 @@
 import express from 'express';
 import PostModel from '../models/Post.js';
+import CommentModel from '../models/Comment.js'
 
 export const getLastTags = async (req: any, res: express.Response) => {
   try {
@@ -78,6 +79,21 @@ export const getAllPopulate = async (req: any, res: express.Response) => {
   }
 };
 
+export const getAllMy = async (req: any, res: express.Response) => {
+  try {
+    const user = req.userId;
+    const posts = await PostModel.find({'user': user}).populate('user').exec();
+
+
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'xui tebe',
+    });
+  }
+};
+
 export const getOne = async (req: any, res: express.Response) => {
   try {
     const postId = req.params.id;
@@ -118,6 +134,7 @@ export const getOne = async (req: any, res: express.Response) => {
 export const remove = async (req: any, res: express.Response) => {
   try {
     const postId = req.params.id;
+    await CommentModel.deleteMany({'post': postId});
 
     PostModel.findOneAndDelete({ _id: postId })
       .then((doc) => {
