@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
         if (!fs.existsSync('uploads')) {
             fs.mkdirSync('uploads');
         }
-        cb(null, 'uploads');
+        cb(null, './uploads');
     },
     filename: (_, file, cb) => {
         cb(null, file.originalname);
@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 app.use(express.json());
 app.use(cors({ origin: '*' }));
-app.use('/upload', express.static('uploads'));
+app.use('/upload', express.static('./uploads'));
 app.get('/', (req, res) => {
     res.send('Hello pidor!');
 });
