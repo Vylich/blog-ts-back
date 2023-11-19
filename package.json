@@ -8,7 +8,7 @@
     "build": "rimraf dist && tsc",
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist",
-    "start": "ts-node src/index.ts"
+    "start": "nodemon src/index.ts"
   },
   "pre-commit": [
     "ts.check",
