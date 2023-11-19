@@ -50,4 +50,5 @@ app.get('/posts/:id', PostController.getOne);
 app.listen(port, () => {
     console.log(`Server on port ${port} ok`);
 });
+module.exports = app;
 //# sourceMappingURL=index.js.map
