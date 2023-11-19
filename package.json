@@ -2,13 +2,13 @@
   "name": "blog-ts-back",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "index.ts",
   "type": "module",
   "scripts": {
     "build": "rimraf dist && tsc",
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist",
-    "start": "npx nodemon"
+    "start": "ts-node src/index.ts"
   },
   "pre-commit": [
     "ts.check",
