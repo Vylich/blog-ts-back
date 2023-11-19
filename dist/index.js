@@ -5,7 +5,7 @@ import fs from 'fs';
 import mongoose from 'mongoose';
 import { registerValidator, loginValidator, postCreateValidation, commentCreateValidation, } from './validations/validations.js';
 import { checkAuth, handleValidationErrors } from './utils/index.js';
-import { UserController, PostController, CommentController } from './controllers/index.js';
+import { UserController, PostController, CommentController, } from './controllers/index.js';
 mongoose
     .connect('mongodb+srv://ilya:vylich@cluster0.vlxnzsy.mongodb.net/blog')
     .then(() => console.log('DB ok'))
@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use('/upload', express.static('uploads'));
 app.get('/', (req, res) => {
     res.send('Hello pidor!');

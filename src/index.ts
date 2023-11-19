@@ -15,7 +15,11 @@ import {
 
 import { checkAuth, handleValidationErrors } from './utils/index.js';
 
-import { UserController, PostController, CommentController } from './controllers/index.js';
+import {
+  UserController,
+  PostController,
+  CommentController,
+} from './controllers/index.js';
 
 mongoose
   .connect('mongodb+srv://ilya:vylich@cluster0.vlxnzsy.mongodb.net/blog')
@@ -40,7 +44,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use('/upload', express.static('uploads'));
 
 app.get('/', (req: express.Request, res: express.Response) => {
@@ -76,7 +80,6 @@ app.get('/posts/new', PostController.getAllNew);
 app.get('/posts/populate', PostController.getAllPopulate);
 app.get('/posts/my', checkAuth, PostController.getAllMy);
 
-
 app.post(
   '/posts',
   checkAuth,
@@ -93,15 +96,17 @@ app.patch(
   PostController.update
 );
 
-app.post('/comments/:id', checkAuth, commentCreateValidation, CommentController.createComment);
+app.post(
+  '/comments/:id',
+  checkAuth,
+  commentCreateValidation,
+  CommentController.createComment
+);
 app.get('/comments', CommentController.getComments);
 app.delete('/comment/:id', checkAuth, CommentController.removeComment);
 
-
 app.get('/tags', PostController.getLastTags);
 app.get('/tags/:id', PostController.getPostsByTag);
-
-
 
 app.get('/posts/:id', PostController.getOne);
 
