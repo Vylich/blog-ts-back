@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import { registerValidator, loginValidator, postCreateValidation, commentCreateValidation, } from './validations/validations.js';
 import { checkAuth, handleValidationErrors } from './utils/index.js';
 import { UserController, PostController, CommentController, ImageController, } from './controllers/index.js';
+import path from 'path';
 mongoose
     .connect('mongodb+srv://ilya:vylich@cluster0.vlxnzsy.mongodb.net/blog')
     .then(() => console.log('DB ok'))
@@ -15,7 +16,7 @@ const port = process.env.PORT || 5000;
 const upload = multer();
 app.use(express.json());
 app.use(cors({ origin: '*' }));
-app.use(fileUpload({ useTempFiles: true }));
+app.use(fileUpload({ useTempFiles: true, tempFileDir: path.join(__dirname, "tmp"), }));
 app.get('/', (req, res) => {
     res.send('Hello pidor!');
 });

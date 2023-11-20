@@ -20,6 +20,7 @@ import {
   CommentController,
   ImageController,
 } from './controllers/index.js';
+import path from 'path';
 
 mongoose
   .connect('mongodb+srv://ilya:vylich@cluster0.vlxnzsy.mongodb.net/blog')
@@ -34,7 +35,7 @@ const upload = multer();
 app.use(express.json());
 app.use(cors({ origin: '*' }));
 
-app.use(fileUpload({useTempFiles: true}))
+app.use(fileUpload({useTempFiles: true, tempFileDir: path.join(__dirname, "tmp"),}))
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.send('Hello pidor!');
