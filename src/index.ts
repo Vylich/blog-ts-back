@@ -2,7 +2,6 @@ import express from 'express';
 import multer from 'multer';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
-import fs from 'fs';
 
 import mongoose from 'mongoose';
 
@@ -30,25 +29,12 @@ mongoose
 const app = express();
 const port = process.env.PORT || 5000;
 
-// const storage = multer.diskStorage({
-//   destination: (_, __, cb) => {
-//     if (!fs.existsSync('uploads')) {
-//       fs.mkdirSync('uploads');
-//     }
-//     cb(null, './uploads');
-//   },
-//   filename: (_, file, cb) => {
-//     cb(null, file.originalname);
-//   },
-// });
-
 const upload = multer();
 
 app.use(express.json());
 app.use(cors({ origin: '*' }));
 
 app.use(fileUpload({useTempFiles: true}))
-// app.use('/upload', express.static('./uploads'));
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.send('Hello pidor!');
@@ -67,16 +53,6 @@ app.post(
   UserController.register
 );
 app.get('/auth/me', checkAuth, UserController.checkMe);
-
-// app.post(
-//   '/upload',
-//   upload.single('image'),
-//   (req: any, res: express.Response) => {
-//     res.json({
-//       url: `/uploads/${req.file.originalname}`,
-//     });
-//   }
-// );
 
 app.post('/upload', ImageController.uploadImage)
 

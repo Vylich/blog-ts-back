@@ -12,37 +12,16 @@ mongoose
     .catch((err) => console.log('DB error', err));
 const app = express();
 const port = process.env.PORT || 5000;
-// const storage = multer.diskStorage({
-//   destination: (_, __, cb) => {
-//     if (!fs.existsSync('uploads')) {
-//       fs.mkdirSync('uploads');
-//     }
-//     cb(null, './uploads');
-//   },
-//   filename: (_, file, cb) => {
-//     cb(null, file.originalname);
-//   },
-// });
 const upload = multer();
 app.use(express.json());
 app.use(cors({ origin: '*' }));
 app.use(fileUpload({ useTempFiles: true }));
-// app.use('/upload', express.static('./uploads'));
 app.get('/', (req, res) => {
     res.send('Hello pidor!');
 });
 app.post('/auth/login', loginValidator, handleValidationErrors, UserController.login);
 app.post('/auth/reg', registerValidator, handleValidationErrors, UserController.register);
 app.get('/auth/me', checkAuth, UserController.checkMe);
-// app.post(
-//   '/upload',
-//   upload.single('image'),
-//   (req: any, res: express.Response) => {
-//     res.json({
-//       url: `/uploads/${req.file.originalname}`,
-//     });
-//   }
-// );
 app.post('/upload', ImageController.uploadImage);
 app.get('/posts', PostController.getAll);
 app.get('/posts/new', PostController.getAllNew);
