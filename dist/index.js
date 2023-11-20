@@ -13,7 +13,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const uploadMiddleware = upload.single("file");
+const uploadMiddleware = upload.single("image");
 app.use(express.json());
 app.use(cors({ origin: '*' }));
 // app.use(fileUpload({useTempFiles: true,}))
