@@ -30,12 +30,14 @@ mongoose
 const app = express();
 const port = process.env.PORT || 5000;
 
-const upload = multer();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+const uploadMiddleware = upload.single("file");
 
 app.use(express.json());
 app.use(cors({ origin: '*' }));
 
-app.use(fileUpload({useTempFiles: true, tempFileDir: path.join(__dirname, "tmp"),}))
+// app.use(fileUpload({useTempFiles: true,}))
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.send('Hello pidor!');
@@ -55,7 +57,7 @@ app.post(
 );
 app.get('/auth/me', checkAuth, UserController.checkMe);
 
-app.post('/upload', ImageController.uploadImage)
+app.post('/upload', uploadMiddleware, ImageController.uploadImage)
 
 app.get('/posts', PostController.getAll);
 app.get('/posts/new', PostController.getAllNew);
