@@ -22,7 +22,7 @@ export const uploadImage = async (req: any, res: any) => {
         console.log('Error in cloudinary.uploader.upload_stream\n', error);
         return;
       }
-      res.json({ cdn_url: result.url });
+      res.json({ url: result.url });
     }
   } catch (e) {
     console.log(e);

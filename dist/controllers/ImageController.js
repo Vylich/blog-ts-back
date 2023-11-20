@@ -17,7 +17,7 @@ export const uploadImage = async (req, res) => {
                 console.log('Error in cloudinary.uploader.upload_stream\n', error);
                 return;
             }
-            res.json({ cdn_url: result.url });
+            res.json({ url: result.url });
         }
     }
     catch (e) {
